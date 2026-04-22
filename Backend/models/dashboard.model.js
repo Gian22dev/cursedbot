@@ -1,0 +1,15 @@
+import db from "../config/db.js"
+
+export const getDashboardData = async () => {
+    const [students] = await db.query("SELECT COUNT (*) AS total FROM students")
+
+    const [pendingPayments] = await db.query("SELECT COUNT(*) AS total FROM accounts_receivable WHERE status = 'pending'")
+
+    const [abstencesToday] = await db.query("SELECT COUNT(*) AS total FROM attendance WHERE attendance_date = CURDATE() AND status = 'absent'")
+
+    return{
+        totalStudents: students[0].total,
+        pendingPayments: pendingPayments[0].total,
+        abstencesToday: abstencesToday[0].total
+    }
+} 
